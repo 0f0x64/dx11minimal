@@ -46,10 +46,65 @@ float3 rotY(float3 pos, float a)
 VS_OUTPUT VS(uint vID : SV_VertexID)
 {
     VS_OUTPUT output = (VS_OUTPUT)0;
-    float2 quad[6] = { -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1 };
-    float2 p = quad[vID];
-    float4 pos = float4(quad[vID], 0, 1);
+    float2 quadUV[6] = { -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1 };
+
+    float3 quad[36] = {
+        -1, -1, 1,
+        1, -1, 1,
+        -1, 1, 1,
+
+        1, -1, 1,
+        1, 1, 1,
+        -1, 1, 1,
+
+        - 1, 1, -1,
+        1, 1, -1,
+        1, -1, -1,
+
+        -1, 1, -1,
+        1, -1, -1,
+        -1, -1, -1, 
+
+        1,-1,-1,
+        1,1,-1,
+        1,-1,1,
+
+        1,1,1,
+        1,-1,1,
+        1,1,-1,
+
+        1,1,1,
+        1,1,-1,
+        -1,1,-1,
+
+        1,1,1,
+        -1,1,1,
+        -1,1,-1,
+
+        1,-1,1,
+        1,-1,-1,
+        -1,-1,-1,
+
+        1,-1,1,
+        -1,-1,1,
+        -1,-1,-1,
+
+        -1,-1,-1,
+        -1,-1,1,
+        - 1,1,-1,
+
+        - 1,-1,1,
+        -1,1,-1,
+        - 1,1,1};
+
+    float3 p = quad[vID];
+    float4 pos = float4(quad[vID], 1);
+    
+    float4 rPos = mul(float4(0,0,1,1), view[0]);
+    output.vnorm = rPos;
+
     output.pos = mul(pos, mul(view[0], proj[0]));
-    output.uv = float2(1, -1) * p / 2. + .5;
+    float2 pUV = float2(atan2(p.x,p.z)/4,p.y/2+.5);
+    output.uv = float2(1, -1) * pUV / 2. + .5;
     return output;
 }

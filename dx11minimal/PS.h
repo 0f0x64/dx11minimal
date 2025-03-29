@@ -40,7 +40,11 @@ float4 PS(VS_OUTPUT input) : SV_Target
 {
     float pi = 3.141519;
 
-//return float4(frac(input.uv.x+time.x*.01), 0, 0, 1);
+float3 nrml = input.vnorm.xyz;
+
+float f = dot(float3(1, 0, 0), nrml);
+
+    //return float4(input.uv.x, 0, 0, 1);
 
     float c = 0;
     for (int i = 1; i < 3; i++)
